@@ -6,7 +6,7 @@
 #define AppName "Sticky Todo"
 ; CI passes /DAppVersion=x.y.z from the git tag; local builds use this default
 #ifndef AppVersion
-  #define AppVersion "1.1.0"
+  #define AppVersion "1.1.1"
 #endif
 #define AppExe "StickyTodo.exe"
 

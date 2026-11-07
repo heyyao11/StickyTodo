@@ -1,8 +1,14 @@
 # Sticky Todo
 
-A minimalist to-do sticky note for Windows 10/11 that can stay always on top.
+A minimalist to-do sticky note for Windows 10/11 that can stay always on top, or tuck itself away at the edge of the screen.
 
-![Sticky Todo demo: adding a to-do, ticking one off, marking one urgent, and switching to the Sticky theme](docs/demo.gif)
+![Sticky Todo demo: adding a to-do, ticking one off, marking one urgent, switching to the Sticky theme, then turning on auto-hide so the note slides into a tab at the screen edge and back out on hover](docs/demo.gif)
+
+- **Auto-hide:** dock the note to any screen edge. It slides away into a thin tab when the mouse leaves and slides back when you hover the tab.
+- **Always on top:** keep it visible over other windows.
+- **Urgent items, notes and reminders:** right-click a to-do for more options.
+- **Themes:** Light, Dark and Sticky.
+- **Global shortcut:** show or hide the note from anywhere.
 
 ## Install
 

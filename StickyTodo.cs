@@ -18,8 +18,8 @@ using System.Windows.Forms;
 [assembly: System.Reflection.AssemblyTitle("Sticky Todo")]
 [assembly: System.Reflection.AssemblyProduct("Sticky Todo")]
 [assembly: System.Reflection.AssemblyCompany("Sticky Todo")]
-[assembly: System.Reflection.AssemblyVersion("1.1.0.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.1.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.1.1.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.1.1.0")]
 
 // Screen edge the note docks to with auto-hide on (the order matches SnapToEdge's gap array)
 enum DockEdge { Left, Right, Top, Bottom }
@@ -1101,6 +1101,9 @@ class StickyForm : Form
     [DllImport("shcore.dll")] static extern int GetDpiForMonitor(IntPtr monitor, int type, out uint dpiX, out uint dpiY);
     [DllImport("user32.dll")] static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, string lParam);
+    [DllImport("user32.dll")] static extern bool RedrawWindow(IntPtr hWnd, IntPtr rect, IntPtr region, uint flags);
+    const int WM_SETREDRAW = 0x000B;
+    const uint RDW_INVALIDATE = 0x1, RDW_ERASE = 0x4, RDW_ALLCHILDREN = 0x80, RDW_UPDATENOW = 0x100;
 
     [StructLayout(LayoutKind.Sequential)] struct RECT { public int Left, Top, Right, Bottom; }
 
@@ -3077,6 +3080,24 @@ class StickyForm : Form
     }
 
     void RebuildRows()
+    {
+        // The old rows are disposed and new ones created; without this the list would show
+        // its empty background for a frame or more until each new row paints itself
+        bool freeze = list.IsHandleCreated;
+        if (freeze) SendMessage(list.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+        try { RebuildRowsCore(); }
+        finally
+        {
+            if (freeze)
+            {
+                SendMessage(list.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                // Paint the list and every new row now, in one pass
+                RedrawWindow(list.Handle, IntPtr.Zero, IntPtr.Zero, RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+            }
+        }
+    }
+
+    void RebuildRowsCore()
     {
         list.SuspendLayout();
         // Keep an in-progress new task in place (removing it would steal its focus and commit it)
