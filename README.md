@@ -2,6 +2,8 @@
 
 A minimalist to-do sticky note for Windows 10/11 that can stay always on top.
 
+![Sticky Todo demo: adding a to-do, ticking one off, marking one urgent, and switching to the Sticky theme](docs/demo.gif)
+
 ## Install
 
 1. Open the [latest release](../../releases/latest) and download **StickyTodo-Setup.exe**.
