@@ -1,0 +1,4 @@
+# Build output (published as GitHub Release assets instead)
+*.exe
+dist/
+*.log
